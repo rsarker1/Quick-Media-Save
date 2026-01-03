@@ -12,13 +12,6 @@ chrome.commands.onCommand.addListener(async (command) => {
       return
     }
 
-    try {
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['content.js'],
-      })
-    } catch (e) {}
-
     // Request media from content script
     chrome.tabs.sendMessage(
       tab.id,
