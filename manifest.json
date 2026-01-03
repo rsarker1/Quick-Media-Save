@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Quick Media Save",
+  "description": "Save hovered images or videos using a keyboard shortcut.",
+  "version": "1.0",
+  "permissions": [
+    "downloads",
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "save-hovered-media": {
+      "suggested_key": {
+        "default": "Alt+S"
+      },
+      "description": "Save hovered image or video"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
