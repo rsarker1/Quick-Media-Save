@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Media Save - Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      color: #333;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Quick Media Save</h1>
+      <p>Configure your media download settings</p>
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <h2 class="section-title">Download Behavior</h2>
+        
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="saveAs" class="toggle-switch">
+            <span class="toggle-slider"></span>
+          </label>
+          <label for="saveAs" class="setting-label" style="display: inline; margin-left: 10px;">
+            Show "Save As" dialog
+          </label>
+          <p class="setting-description">
+            When enabled, you'll be prompted to choose where to save each file instead of automatically downloading.
+          </p>
+        </div>
+
+        <div class="setting-item">
+          <label class="setting-label" for="filename">Filename Format</label>
+          <p class="setting-description">Customize how downloaded files are named</p>
+          <select id="filename">
+            <option value="timestamp">media-[timestamp]</option>
+            <option value="counter">media-[counter]</option>
+            <option value="source">media-[source]</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Site-Specific Settings</h2>
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="detectHiddenVideo">
+            Detect hidden video sources
+          </label>
+          <p class="setting-description">
+            Attempt to find video sources that aren't in simple &lt;video&gt; tags (experimental).
+          </p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Keyboard Shortcut</h2>
+        
+        <div class="setting-item">
+          <p class="setting-description">
+            To change your keyboard shortcut, go to:
+            <strong>chrome://extensions/shortcuts</strong>
+          </p>
+          <p class="keyboard-hint">
+            Default shortcut: Alt+S 
+          </p>
+        </div>
+      </div>
+
+      <button class="save-button" id="saveButton">Save Settings</button>
+      <div class="status-message" id="statusMessage"></div>
+    </div>
+
+    <div class="footer">
+      Quick Media Save v1.0 • Hover over any image or video and press your shortcut to save
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

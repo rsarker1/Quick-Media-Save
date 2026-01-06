@@ -12,7 +12,6 @@ chrome.commands.onCommand.addListener(async (command) => {
       return
     }
 
-    // Request media from content script
     chrome.tabs.sendMessage(
       tab.id,
       { type: 'GET_HOVERED_MEDIA' },
@@ -27,34 +26,40 @@ chrome.commands.onCommand.addListener(async (command) => {
           return
         }
 
-        chrome.downloads.download({
-          url: media.src,
-          conflictAction: 'uniquify',
-          saveAs: false,
-        })
-        // try {
-        //   // Handle relative URLs
-        //   let downloadUrl = media.src;
-        //   if (!downloadUrl.startsWith("http") && !downloadUrl.startsWith("data:")) {
-        //     downloadUrl = new URL(media.src, tab.url).href;
-        //   }
+        try {
+          let downloadUrl = media.src
+          // if (!downloadUrl.startsWith("http") && !downloadUrl.startsWith("data:")) {
+          //   downloadUrl = new URL(media.src, tab.url).href;
+          // }
 
-        //   // Generate filename with extension
-        //   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-        //   const ext = media.type === "video" ? "mp4" : "jpg";
-        //   const filename = `media-${timestamp}.${ext}`;
+          // const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
 
-        //   await chrome.downloads.download({
-        //     url: downloadUrl,
-        //     filename: filename,
-        //     conflictAction: "uniquify",
-        //     saveAs: false
-        //   });
+          let ext = media.type === 'video' ? 'mp4' : 'jpg'
+          const urlExt = downloadUrl.match(/\.([a-z0-9]+)(?:[?#]|$)/i)
 
-        //   console.log(`Downloaded: ${filename}`);
-        // } catch (error) {
-        //   console.error("Download failed:", error);
-        // }
+          if (urlExt) {
+            const detectedExt = urlExt[1].toLowerCase()
+            if (
+              ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(detectedExt)
+            ) {
+              ext = detectedExt === 'jpeg' ? 'jpg' : detectedExt
+            } else if (['mp4', 'webm', 'mov', 'avi'].includes(detectedExt)) {
+              ext = detectedExt
+            }
+          }
+
+          // const filename = `media-${timestamp}.${ext}`
+          await chrome.downloads.download({
+            url: downloadUrl,
+            // filename: filename,
+            conflictAction: 'uniquify',
+            saveAs: false,
+          })
+
+          console.log(`Downloaded`)
+        } catch (error) {
+          console.error('Download failed:', error)
+        }
       }
     )
   } catch (error) {
