@@ -2,6 +2,30 @@ const defaultSettings = {
   saveAs: false,
 }
 
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast')
+  const toastMessage = toast.querySelector('.toast-message')
+  const toastIcon = toast.querySelector('.toast-icon')
+
+  toastMessage.textContent = message
+
+  if (type === 'success') {
+    toastIcon.textContent = '✓'
+    toast.className = 'toast success'
+  } else if (type === 'error') {
+    toastIcon.textContent = '✕'
+    toast.className = 'toast error'
+  }
+
+  setTimeout(() => {
+    toast.classList.add('show')
+  }, 10)
+
+  setTimeout(() => {
+    toast.classList.remove('show')
+  }, 3000)
+}
+
 async function loadSettings() {
   const settings = await chrome.storage.sync.get(defaultSettings)
 
@@ -13,16 +37,13 @@ async function saveSettings() {
     saveAs: document.getElementById('saveAs').checked,
   }
 
-  await chrome.storage.sync.set(settings)
-
-  const statusMessage = document.getElementById('statusMessage')
-  statusMessage.textContent = 'Settings saved successfully!'
-  statusMessage.className = 'status-message success'
-  statusMessage.style.display = 'block'
-
-  setTimeout(() => {
-    statusMessage.style.display = 'none'
-  }, 3000)
+  try {
+    await chrome.storage.sync.set(settings)
+    showToast('Settings saved successfully!', 'success')
+  } catch (error) {
+    showToast('Failed to save settings', 'error')
+    console.error('Save error:', error)
+  }
 }
 
 document.addEventListener('DOMContentLoaded', loadSettings)
